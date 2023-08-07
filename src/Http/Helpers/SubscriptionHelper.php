@@ -72,4 +72,21 @@ class SubscriptionHelper
             }
         )->wait();
     }
+
+    public static function subscribeValidation($request)
+    {
+        return $request->validate([
+             'fastspring_account_id' => ['required'],
+             'subscription_id' => ['required'],
+             'fastspring_id' => ['required', 'string'],
+         ]);
+    }
+
+    public static function cancelOrPauseValidation($request)
+    {
+        return $request->validate([
+            'subscription_id' => ['required'],
+            'pause_period' => ['sometimes'],
+         ]);
+    }
 }
