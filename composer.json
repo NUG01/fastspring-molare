@@ -1,0 +1,29 @@
+{
+    "name": "nug01/molare",
+    "description": "This package helps in fastspring subscriptions",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Nugzar Skhireli"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "guzzlehttp/guzzle": "^7.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragori\\Molare\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "NUG01\\Molare\\MolareServiceProvider"
+            ],
+            "aliases": {
+                "Debugbar": "NUG01\\Molare\\Facade"
+            }
+        }
+    }
+}
