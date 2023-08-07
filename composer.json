@@ -13,9 +13,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Laragori\\Molare\\": "src/"
+            "NUG01\\Molare\\": "src/"
         }
     },
+    "minimum-stability": "dev",
     "extra": {
         "laravel": {
             "providers": [
