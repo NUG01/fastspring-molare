@@ -87,6 +87,8 @@ class SubscriptionHelper
         return $request->validate([
             'subscription_id' => ['required'],
             'pause_period' => ['sometimes'],
+            'plan' => ['sometimes'],
+
          ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace NUG01\Molare\Http\Repositories;
 
+use Mockery\Undefined;
 use NUG01\Molare\Http\Helpers\SubscriptionHelper;
 use NUG01\Molare\Http\Services\FastspringService;
 use NUG01\Molare\Models\FastspringUser;
@@ -19,9 +20,9 @@ class SubscriptionRepository
     public function createSubscription($request, $user)
     {
         try {
-            $this->createFastspringUser($request);
+            $this->createFastspringUser($request, $user);
 
-            $subscription = Subscription::where('user_id', auth()->user()->id)->where('active', true)->get();
+            $subscription = Subscription::where('user_id', $user->id)->where('active', true)->get();
             if ($subscription->count() > 0) {
                 for ($i = 0; $i < $subscription->count(); $i++) {
                     $subscription[$i]->update(['active' => 0, 'cancelled_at' => now()]);
@@ -30,21 +31,21 @@ class SubscriptionRepository
             }
             $sub=$this->fastspring_service->getFastspringSubscription($request);
 
-            $subscription =   Subscription::create([
+            $new_subscription =   Subscription::create([
               'user_id' => $user->id,
-              'fastspring_account_id' => $request->fastspring_account_id,
-              'subscription_id' => $request->subscription_id,
+              'fastspring_account_id' => $request['fastspring_account_id'],
+              'subscription_id' => $request['subscription_id'],
               'order_reference' => $sub->initialOrderReference,
-              'fastspring_id' => $request->fastspring_id,
+              'fastspring_id' => $request['fastspring_id'],
               'plan' => strtolower($sub->product),
               'currency' => $sub->currency,
-              'interval_type' => $sub->subscriptions->intervalUnit,
+              'interval_type' => $sub->intervalUnit,
             ]);
 
-            $user->update(['plan'=>strtolower($request->plan)]);
+            $user->update(['plan'=>strtolower($sub->product)]);
 
 
-            return $subscription;
+            return $new_subscription;
         } catch (\Exception $e) {
             throw new $e('Subscription failed!');
         }
@@ -52,20 +53,20 @@ class SubscriptionRepository
 
 
 
-    private function createFastspringUser($request, $dataToReturn = 'created-user')
+    public static function createFastspringUser($request, $user, $dataToReturn = 'created-user')
     {
 
-        if ($fastspring_user = FastspringUser::where('account_id', $request->fastspring_account_id)->first()) {
+        if ($fastspring_user = FastspringUser::where('account_id', $request['fastspring_account_id'])->first()) {
             return $fastspring_user;
         }
 
 
         try {
-            $content = $this->fastspring_service->getFastspringAccount($request);
+            $content = (new FastspringService())->getFastspringAccount($request);
 
             $fastspring_user = FastspringUser::create([
               'account_id' => $content->account,
-              'user_id' => auth()->user()->id,
+              'user_id' => $user->id,
               'fullname' => $content->contact->first . ' ' . $content->contact->last,
               'phone_number' => $content->contact->phone,
               'email' => $content->contact->email,
@@ -84,12 +85,11 @@ class SubscriptionRepository
 
     public function cancelSubscription($request, $user)
     {
-
         $response = $this->fastspring_service->deleteFastspringSubscription($request);
         if ($response['status'] == 200) {
-            $subscription = Subscription::where('subscription_id', $request->subscription_id)->first();
+            $subscription = Subscription::where('subscription_id', $request['subscription_id'])->first();
             $subscription->update(['active' => false, 'cancelled_at' => now()]);
-            $user->update(['plan'=>strtolower($request->plan)]);
+            $user->update(['plan'=>'free']);
 
         }
         return $response['data'];
@@ -103,7 +103,7 @@ class SubscriptionRepository
             $response = $this->fastspring_service->pauseFastspringSubscription($request);
 
             if ($response['status'] == 200) {
-                $subscription = Subscription::where('subscription_id', $request->subscription_id)->first();
+                $subscription = Subscription::where('subscription_id', $request['subscription_id'])->first();
                 $subscription->update(['active' => false, 'paused_at' => now()]);
                 $user->update(['plan'=>'free']);
                 return $response['data'];

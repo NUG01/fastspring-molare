@@ -17,7 +17,7 @@ class SubscriptionController
         $subscribe_validation = SubscriptionHelper::subscribeValidation($request);
 
         $created_subscription = (new SubscriptionRepository())->createSubscription($subscribe_validation, $user);
-        return response()->json(['data' => $created_subscription]);
+        return response()->json(['data'=> $created_subscription]);
     }
 
     public static function cancelSubscription($request, $user)
