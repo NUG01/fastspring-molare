@@ -34,10 +34,9 @@ class SubscriptionController
         return response()->json(['response' => $response]);
     }
 
-    public static function manageSubscriptions($request)
+    public static function manageSubscriptions($subscriptionId)
     {
-        Subscription::where('subscription_id', $request->subscription_id)
-          ->update(['active' => true, 'cancelled_at' => null, 'ends_at' => now()->addDays(30)]);
+        (new SubscriptionRepository())->continueSubscription($subscriptionId);
         return response()->noContent();
     }
 }

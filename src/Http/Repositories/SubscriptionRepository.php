@@ -112,4 +112,10 @@ class SubscriptionRepository
             throw new $e('Something went wrong!');
         }
     }
+
+    public function continueSubscription($subscriptionId)
+    {
+        Subscription::where('subscription_id', $subscriptionId)
+        ->update(['active' => true, 'cancelled_at' => null, 'ends_at' => now()->addDays(30)]);
+    }
 }
