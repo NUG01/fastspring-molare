@@ -85,12 +85,12 @@ if (SubscriptionHelper::isSubscribed()) {
     // Handle subscribed user
 }
 
-// Check if the user's subscription has expired
+// Check if the user\'s subscription has expired
 if (SubscriptionHelper::subscriptionExpired()) {
     // Handle expired subscription
 }
 
-// Get the user's subscription details
+// Get the user\'s subscription details
 $subscription = SubscriptionHelper::userSubscription();
 ```
 
