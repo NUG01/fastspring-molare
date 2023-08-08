@@ -37,13 +37,13 @@ php artisan vendor:publish --provider="NUG01\Molare\MolareServiceProvider" --tag
 Subscription: Subscribe a user.
 
 ```sh
-use NUG01\Molare\Http\Controllers\SubscriptionController as NUG01;
+use NUG01\Molare\Http\Controllers\SubscriptionController as Molare;
 
 // ...
 
 public function subscribe(Request $request)
 {
-    $res = NUG01::subscribe($request, auth()->user());
+    $res = Molare::subscribe($request, auth()->user());
     return response()->json(['data' => $res]);
 }
 ```
@@ -54,7 +54,7 @@ Cancel Subscription: Cancel a user's subscription.
 ```sh
 public function cancelSubscription(Request $request)
 {
-    $res = NUG01::cancelSubscription($request, auth()->user());
+    $res = Molare::cancelSubscription($request, auth()->user());
     return response()->json(['data' => $res]);
 }
 ```
@@ -64,7 +64,7 @@ Pause Subscription: Pause a user's subscription.
 ```sh
 public function pauseSubscription(Request $request)
 {
-    $res = NUG01::pauseSubscription($request, auth()->user());
+    $res = Molare::pauseSubscription($request, auth()->user());
     return response()->json(['data' => $res]);
 }
 ```
@@ -74,7 +74,7 @@ Continue Subscription: Continue a paused subscription.
 ```sh
 public function continueSubscription(Request $request)
 {
-    NUG01::continueSubscription($request);
+    Molare::continueSubscription($request);
     return response()->noContent();
 }
 ```
