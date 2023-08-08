@@ -34,7 +34,7 @@ class SubscriptionController
         return response()->json(['response' => $response]);
     }
 
-    public static function manageSubscriptions($subscriptionId)
+    public static function continueSubscription($subscriptionId)
     {
         (new SubscriptionRepository())->continueSubscription($subscriptionId);
         return response()->noContent();
