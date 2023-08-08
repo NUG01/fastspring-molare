@@ -80,12 +80,12 @@ use NUG01\Molare\Http\Helpers\SubscriptionHelper;
 
 // ...
 
-// Check if the user is subscribed
+// Check If the user is subscribed
 if (SubscriptionHelper::isSubscribed()) {
     // Handle subscribed user
 }
 
-// Check if the user\'s subscription has expired
+// Check If the user\'s subscription has expired
 if (SubscriptionHelper::subscriptionExpired()) {
     // Handle expired subscription
 }
