@@ -17,7 +17,7 @@ composer require nug01/molare:dev-master
 
 Next, publish the package's configuration file, If you want:
 ```sh
-composer require nug01/php artisan vendor:publish --provider="NUG01\Molare\MolareServiceProvider" --tag="config"molare:dev-master
+php artisan vendor:publish --provider="NUG01\Molare\MolareServiceProvider" --tag="config"molare:dev-master
 ```
 
 
