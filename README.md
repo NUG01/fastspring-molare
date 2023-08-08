@@ -13,6 +13,16 @@ composer require nug01/molare:dev-master
 
 
 #
+### Environment
+
+Add the fastspring secret key in .env like this:
+
+```sh
+FASTSPRING_TOKEN={YOUR_FASTSPRING_SECRET_KEY}
+```
+
+
+#
 ### Publishing
 
 Next, publish the package's configuration file, If you want:
