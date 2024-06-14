@@ -40,8 +40,9 @@ Add the following credentials to your `.env` file:
 ```dotenv
 FASTSPRING_USERNAME=your_fastspring_username
 FASTSPRING_PASSWORD=your_fastspring_password
+```
 
-
+```
 Account: Get an account.
 
 ```sh
