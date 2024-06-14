@@ -46,11 +46,19 @@ class FastSpringService
 
     public function updateAccount(string $account_id, $request)
     {
+        $validated = $request->validate([
+            'first' => 'required|string',
+            'last' => 'required|string',
+            'email' => 'required|email',
+            'company' => 'required|string',
+            'phone' => 'required|string',
+        ]);
+
         $payload = [
             'contact' => [],
         ];
 
-        foreach ($request->all() as $key => $value) {
+        foreach ($validated as $key => $value) {
             $payload['contact'][$key] = $value ?? '';
         }
 
@@ -59,10 +67,10 @@ class FastSpringService
         return MolareHelper::fastspring_response($response);
     }
 
-    public function pauseSubscription(string $subscription_id)
+    public function pauseSubscription(string $subscription_id, $period_count = 1)
     {
         $response = $this->client->post("subscriptions/$subscription_id/pause", [
-            'pausePeriodCount' => 1
+            'pausePeriodCount' => $period_count,
         ]);
 
         return MolareHelper::fastspring_response($response);
