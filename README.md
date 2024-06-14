@@ -31,84 +31,94 @@ php artisan vendor:publish --provider="NUG01\Molare\MolareServiceProvider" --tag
 ```
 
 
-#
-### Usage
+# Usage
 
-Subscription: Subscribe a user.
+### Setup
+
+Add the following credentials to your `.env` file:
+
+```dotenv
+FASTSPRING_USERNAME=your_fastspring_username
+FASTSPRING_PASSWORD=your_fastspring_password
+
+
+Account: Get an account.
 
 ```sh
-use NUG01\Molare\Http\Controllers\SubscriptionController as Molare;
+use App\Services\FastSpringService;
+// ...
+
+$service = new FastSpringService();
+$response = $service->getAccount($account_id);
+return response()->json(['data' => $response['data'], 'result' => $response['result']]);
+
+```
+
+Management URL: Get the management URL for an account.
+
+```
+use App\Services\FastSpringService;
 
 // ...
 
-public function subscribe(Request $request)
-{
-    $res = Molare::subscribe($request, auth()->user());
-    return response()->json(['data' => $res]);
-}
+$service = new FastSpringService();
+$response = $service->getManagementUrl($account_id);
+return response()->json(['data' => $response['data'], 'result' => $response['result']]);
 ```
 
+Subscription: Get subscription details.
 
-Cancel Subscription: Cancel a user's subscription.
-
-```sh
-public function cancelSubscription(Request $request)
-{
-    $res = Molare::cancelSubscription($request, auth()->user());
-    return response()->json(['data' => $res]);
-}
 ```
-
-Pause Subscription: Pause a user's subscription.
-
-```sh
-public function pauseSubscription(Request $request)
-{
-    $res = Molare::pauseSubscription($request, auth()->user());
-    return response()->json(['data' => $res]);
-}
-```
-
-Continue Subscription: Continue a paused subscription.
-
-```sh
-public function continueSubscription(Request $request)
-{
-    Molare::continueSubscription($request);
-    return response()->noContent();
-}
-```
-
-
-#
-### Helper Functions
-
-Subscription: Subscribe a user.
-
-```sh
-use NUG01\Molare\Http\Helpers\SubscriptionHelper;
+use App\Services\FastSpringService;
 
 // ...
 
-// Check subscription status
-if (SubscriptionHelper::isSubscribed()) {
-    // Handle subscribed user
-}
-
-// Check subscription expiration status
-if (SubscriptionHelper::subscriptionExpired()) {
-    // Handle expired subscription
-}
-
-// Get the subscription details
-$subscription = SubscriptionHelper::userSubscription();
+$service = new FastSpringService();
+$response = $service->getSubscription($subscription_id);
+return response()->json(['data' => $response['data'], 'result' => $response['result']]);
 ```
 
+Update Account: Update account details.
+
+```
+use App\Services\FastSpringService;
+use Illuminate\Http\Request;
+
+// ...
+
+$service = new FastSpringService();
+$response = $service->updateAccount($account_id, $request);
+return response()->json(['data' => $response['data'], 'result' => $response['result']]);
+```
+
+Pause Subscription: Pause a subscription.
+
+```
+use App\Services\FastSpringService;
+
+// ...
+
+$service = new FastSpringService();
+$response = $service->pauseSubscription($subscription_id, 1); // Adjust period count as needed
+return response()->json(['data' => $response['data'], 'result' => $response['result']]);
+```
+
+Resume Subscription: Resume a paused subscription.
+
+```
+use App\Services\FastSpringService;
+
+// ...
+
+$service = new FastSpringService();
+$response = $service->resumeSubscription($subscription_id);
+return response()->json(['data' => $response['data'], 'result' => $response['result']]);
+```
 
 #
 ### Configuration
 
-You can configure the package by modifying the config/molare.php file. This file allows you to set various options related to the FastSpring integration and subscription management.
+You can configure the package by modifying the config/fastspring.php file. This file allows you to set various options related to the FastSpring integration and subscription management.
 Support
 
 ### Support
